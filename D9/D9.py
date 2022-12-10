@@ -70,7 +70,6 @@ with open('input.txt', 'r') as f:
                     step = dists.index(min(dists))
                     rope[s] = (rope[s][0]+diag[step][0], rope[s][1]+diag[step][1])
                 s += 1
-            print(rope)
             if rope[9] not in pos:
                 pos.append(rope[9])
 
