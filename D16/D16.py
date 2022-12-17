@@ -2,11 +2,12 @@ import networkx as nx
 
 def get_valid_paths(start, stops, tr, total_flow):
     global flow
+    global dists
     valid = {}
     valid[''] = tr
     for s in stops:
         if start != '' and s != '':
-            dist = nx.shortest_path_length(G, source=start, target=s)
+            dist = dists[(start, s)]
             if tr - (dist + 1) > 0:
                 valid[s] = dist + 1
     return valid
@@ -103,6 +104,18 @@ with open('input.txt', 'r') as f:
         for i in range(9, len(comps)):
             dest = comps[i][:-1]
             G.add_edge(node, dest)
+
+dists = {}
+nodes = list(rates.keys())
+nodes.append('AA')
+
+for i in range(len(nodes)):
+    for j in range(i+1, len(nodes)):
+        n = nodes[i]
+        n2 = nodes[j]
+        if n != n2:
+            dists[(n, n2)] = nx.shortest_path_length(G, source=n, target=n2)
+            dists[(n2, n)] = dists[(n, n2)]
 
 # P1
 flow = 0
