@@ -6,8 +6,16 @@ def traverse(row, col, dim):
     elif row == dim and col != dim:
         return 1
     else:
-        return traverse(row, col + 1, dim) + traverse(row + 1, col, dim)
+        if (dim - row, dim - col) in paths:
+            return paths[(dim - row, dim - col)]
+        else:
+            dist = traverse(row, col + 1, dim) + traverse(row + 1, col, dim)
+            paths[(dim - row, dim - col)] = dist
+            paths[(dim - col, dim - row)] = dist
+            return dist
 
 
-print(traverse(0, 0, 15))
-print(6*(4**17))
+paths = {}
+for i in range(21):
+    traverse(0, 0, i)
+print(paths[(20, 20)])
