@@ -1,4 +1,5 @@
 import itertools
+import math
 import re
 import numpy as np
 
@@ -87,6 +88,17 @@ def prime_factorize(num):
     if num > 1:
         factors.append(num)
     return factors
+
+
+def divisors(n):
+    large_divisors = []
+    for i in range(1, int(math.sqrt(n) + 1)):
+        if n % i == 0:
+            yield i
+            if i*i != n:
+                large_divisors.append(int(n / i))
+    for divisor in reversed(large_divisors):
+        yield divisor
 
 
 def totient(n):
