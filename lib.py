@@ -1,7 +1,16 @@
 import itertools
 import math
 import re
+from dataclasses import dataclass, field
+from typing import Any
+
 import numpy as np
+
+
+@dataclass(order=True)
+class PrioritizedItem:
+    priority: int
+    item: Any = field(compare=False)
 
 
 def file_to_match(file, match=r'\w+'):
@@ -23,17 +32,18 @@ def file_to_ints(file, multi=True):
     return data
 
 
-def split_file(file, delim="[\s]"):
+def split_file(file, delim="[\s]", cast=False):
     data = []
     with open(file) as f:
         for line in f:
             comps = re.split(delim, line[:-1])
-            for i in range(len(comps)):
-                if is_float(comps[i]):
-                    if comps[i].isdigit():
-                        comps[i] = int(comps[i])
-                    else:
-                        comps[i] = float(comps[i])
+            if cast:
+                for i in range(len(comps)):
+                    if is_float(comps[i]):
+                        if comps[i].isdigit():
+                            comps[i] = int(comps[i])
+                        else:
+                            comps[i] = float(comps[i])
             data.append(comps)
 
     return data
@@ -112,4 +122,39 @@ def totient(n):
         p += 1
     if n > 1:
         result -= int(result / n)
+    return result
+
+
+def neighbors8(matrix, rowNumber, colNumber):
+    result = []
+    for rowAdd in range(-1, 2):
+        newRow = rowNumber + rowAdd
+        if newRow >= 0 and newRow <= len(matrix)-1:
+            for colAdd in range(-1, 2):
+                newCol = colNumber + colAdd
+                if newCol >= 0 and newCol <= len(matrix)-1:
+                    if newCol == colNumber and newRow == rowNumber:
+                        continue
+                    result.append((newRow, newCol))
+    return result
+
+
+def neighbors4(matrix, rowNumber, colNumber, check_dims=True):
+    result = []
+    if not check_dims or rowNumber >= 1:
+        result.append((rowNumber - 1, colNumber))
+    if not check_dims or rowNumber < matrix.shape[0] - 1:
+        result.append((rowNumber + 1, colNumber))
+    if not check_dims or colNumber >= 1:
+        result.append((rowNumber, colNumber - 1))
+    if not check_dims or colNumber < matrix.shape[1] - 1:
+        result.append((rowNumber, colNumber + 1))
+    return result
+
+
+def neighbors4_wrapped(matrix, rowNumber, colNumber):
+    result = [((rowNumber - 1) % matrix.shape[0], colNumber % matrix.shape[1]),
+              ((rowNumber + 1) % matrix.shape[0], colNumber % matrix.shape[1]),
+              (rowNumber % matrix.shape[0], (colNumber - 1) % matrix.shape[1]),
+              (rowNumber % matrix.shape[0], (colNumber + 1) % matrix.shape[1])]
     return result
