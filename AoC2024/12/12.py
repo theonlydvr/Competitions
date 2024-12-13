@@ -55,18 +55,6 @@ for plots in food_dict.values():
             trans_new = plot[1:, c] - plot[:-1, c]
             sides += np.sum((trans_new != transitions) & ((transitions == 0) | (transitions == -trans_new)))
             transitions = trans_new
-        # for r in range(1, plot.shape[0] - 1):
-        #     for c in range(1, plot.shape[0] - 1):
-        #         neighbors = lib.neighbors4(plot, r, c)
-        #         count = 0
-        #         for nr, nc in neighbors:
-        #             count += (plot[r, c] and not plot[nr, nc]) or (not plot[r, c] and plot[nr, nc])
-        #         if count == 4:  # single internal
-        #             sides += 4
-        #         elif count == 3:
-        #             sides += 2
-        #         elif count == 2 and (plot[r - 1, c] != plot[r + 1, c] or plot[r, c - 1] != plot[r, c + 1]):
-        #             sides += 1
         total += area * sides
 
 print(total)
