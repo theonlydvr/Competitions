@@ -1,7 +1,7 @@
 import lib
 
 # P1
-lines = lib.split_file('test3.txt')
+lines = lib.split_file('input.txt')
 A = int(lines[0][-1])
 B = int(lines[1][-1])
 C = int(lines[2][-1])
